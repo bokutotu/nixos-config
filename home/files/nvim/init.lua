@@ -1,0 +1,31 @@
+if vim.fn.has('nvim-0.12') ~= 1 then
+  error('This config requires Neovim 0.12 or newer for vim.pack')
+end
+
+require('plugins')
+
+require('basic')
+require('indent')
+
+require('rc.bufferline')
+require('rc.lualine')
+require('rc.lsp')
+require('rc.telescope')
+require('rc.lspkind')
+require('rc.nvim-cmp')
+require('rc.lspsaga')
+require('rc.trobule')
+require('rc.treesitter')
+require('rc.comment')
+require('rc.nvim-navic')
+require('rc.fuzzy-motion')
+require('rc.nvim-tree')
+require('rc.diffview')
+require('rc.gitsigns')
+require('rc.neoformat')
+require('rc.indent-blankline')
+require('rc.rust')
+-- require('rc.copilot_chat')
+-- require('rc.avante')
+require('rc.autopaires')
+require('rc.haskell')
