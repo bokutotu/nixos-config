@@ -129,6 +129,11 @@ prefix=${config.home.homeDirectory}/.npm-global
     };
   };
 
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
   home.stateVersion = "25.11";
 
   programs.home-manager.enable = true;
