@@ -20,6 +20,22 @@
         inherit system;
         config.allowUnfree = true;
       };
+      codexPackage = unstablePkgs.codex.overrideAttrs (finalAttrs: previousAttrs: {
+        version = "0.135.0";
+
+        src = unstablePkgs.fetchFromGitHub {
+          owner = "openai";
+          repo = "codex";
+          tag = "rust-v${finalAttrs.version}";
+          hash = "sha256-7Ak7rpogcN2kNezk7aMdMmkgNyPxH58f6lFdXOd/mgc=";
+        };
+
+        cargoHash = "sha256-v1ggzNoncBVcOiJDQNNKPxYqWASNGjVjLMCXhsIbrVI=";
+        cargoDeps = unstablePkgs.rustPlatform.fetchCargoVendor {
+          inherit (finalAttrs) pname version src sourceRoot;
+          hash = finalAttrs.cargoHash;
+        };
+      });
     in {
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
         inherit system;
@@ -33,7 +49,7 @@
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "hm-backup";
             home-manager.extraSpecialArgs = {
-              inherit unstablePkgs;
+              inherit codexPackage unstablePkgs;
             };
 
             home-manager.users.${username} = import ./home/hikaru.nix;

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, unstablePkgs ? pkgs, ... }:
+{ config, lib, pkgs, unstablePkgs ? pkgs, codexPackage ? unstablePkgs.codex, ... }:
 
 let
   nvimConfigDir = ./files/nvim;
@@ -14,6 +14,7 @@ in
   home.homeDirectory = "/home/hikaru";
 
   home.sessionPath = [
+    "${codexPackage}/bin"
     "${config.home.homeDirectory}/.npm-global/bin"
   ];
 
@@ -31,6 +32,7 @@ prefix=${config.home.homeDirectory}/.npm-global
   } // nvimHomeFiles;
 
   home.packages = [
+    codexPackage
     unstablePkgs.neovim
     pkgs.git
     pkgs.gh

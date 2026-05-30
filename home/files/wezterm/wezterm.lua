@@ -16,6 +16,11 @@ config.window_padding = {
   top = 0,
   bottom = 0,
 }
+config.font = wezterm.font_with_fallback {
+  'JetBrainsMono Nerd Font',
+  'Noto Sans CJK JP',
+  'Noto Color Emoji',
+}
 config.font_size = 10.0
 
 return config
