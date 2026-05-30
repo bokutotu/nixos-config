@@ -15,6 +15,7 @@ in
 
   home.sessionPath = [
     "${codexPackage}/bin"
+    "${config.home.homeDirectory}/.local/bin"
     "${config.home.homeDirectory}/.npm-global/bin"
   ];
 
@@ -29,6 +30,20 @@ prefix=${config.home.homeDirectory}/.npm-global
     ".claude/CLAUDE.md".source = ./files/claude/CLAUDE.md;
     ".latexmkrc".source = ./files/latexmkrc;
     ".vimrc".source = ./files/vimrc;
+    ".local/bin/external-monitor-ls" = {
+      source = ./files/bin/external-monitor-ls;
+      executable = true;
+    };
+    ".local/bin/external-monitor-use" = {
+      source = ./files/bin/external-monitor-use;
+      executable = true;
+    };
+    ".local/bin/external-monitor-off" = {
+      source = ./files/bin/external-monitor-off;
+      executable = true;
+    };
+    ".config/lxqt/session.conf".source = ./files/lxqt/session.conf;
+    ".config/lxqt/lxqt.conf".source = ./files/lxqt/lxqt.conf;
   } // nvimHomeFiles;
 
   home.packages = [

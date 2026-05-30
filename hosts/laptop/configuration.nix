@@ -11,6 +11,9 @@
   services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
   services.xserver.desktopManager.lxqt.enable = true;
+  environment.lxqt.excludePackages = with pkgs; [
+    xscreensaver
+  ];
 
   fonts = {
     packages = with pkgs; [
@@ -54,6 +57,11 @@
   hardware.graphics.enable = true;
 
   services.power-profiles-daemon.enable = false;
+
+  services.logind.settings.Login = {
+    HandleLidSwitchDocked = "ignore";
+    HandleLidSwitchExternalPower = "ignore";
+  };
 
   services.tlp = {
     enable = true;
@@ -162,6 +170,11 @@
   # };
 
   # programs.firefox.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    xorg.xrandr
+    xsecurelock
+  ];
 
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).

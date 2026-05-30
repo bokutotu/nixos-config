@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+external-monitor-use - use one connected display output only
+
+Usage:
+  external-monitor-use OUTPUT
+  external-monitor-use --help
+
+Example:
+  external-monitor-use HDMI-1-0
+EOF
+}
+
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+  usage
+  exit 0
+fi
+
+if [[ "$#" -ne 1 ]]; then
+  usage >&2
+  exit 2
+fi
+
+if [[ -z "${DISPLAY:-}" ]]; then
+  echo "ERROR: DISPLAY is not set. Run this inside the LXQt X11 session." >&2
+  exit 1
+fi
+
+providers="$(xrandr --listproviders)"
+nvidia_provider="${EXTERNAL_MONITOR_NVIDIA_PROVIDER:-}"
+if [[ -z "$nvidia_provider" ]]; then
+  nvidia_provider="$(
+    printf '%s\n' "$providers" \
+      | sed -n 's/.*name://p' \
+      | grep -E '^NVIDIA-G[0-9]+$' \
+      | head -n 1 \
+      || true
+  )"
+fi
+
+sink_provider="${EXTERNAL_MONITOR_SINK_PROVIDER:-}"
+if [[ -z "$sink_provider" ]]; then
+  sink_provider="$(
+    printf '%s\n' "$providers" \
+      | sed -n 's/.*name://p' \
+      | grep -E '^(modesetting|Intel|AMD|Radeon)' \
+      | head -n 1 \
+      || true
+  )"
+fi
+
+if [[ -n "$nvidia_provider" && -n "$sink_provider" ]]; then
+  xrandr --setprovideroutputsource "$nvidia_provider" "$sink_provider" 2>/dev/null || true
+fi
+
+target_output="$1"
+mapfile -t connected_outputs < <(xrandr --query | awk '$2 == "connected" { print $1 }')
+
+target_connected=false
+for connected_output in "${connected_outputs[@]}"; do
+  if [[ "$connected_output" == "$target_output" ]]; then
+    target_connected=true
+  fi
+done
+
+if [[ "$target_connected" != true ]]; then
+  echo "ERROR: output is not connected: $target_output" >&2
+  echo "Connected outputs:" >&2
+  printf '  %s\n' "${connected_outputs[@]}" >&2
+  exit 1
+fi
+
+xrandr_args=(--output "$target_output" --auto --primary)
+for connected_output in "${connected_outputs[@]}"; do
+  if [[ "$connected_output" != "$target_output" ]]; then
+    xrandr_args+=(--output "$connected_output" --off)
+  fi
+done
+
+xrandr "${xrandr_args[@]}"
