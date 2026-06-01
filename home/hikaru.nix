@@ -103,6 +103,7 @@ prefix=${config.home.homeDirectory}/.npm-global
 
   programs.git = {
     enable = true;
+    lfs.enable = true;
     settings.user = {
       name = "Hikaru Kondo";
       email = "mushin.hudoushin@gmail.com";
