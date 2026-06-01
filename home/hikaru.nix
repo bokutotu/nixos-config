@@ -85,6 +85,9 @@ prefix=${config.home.homeDirectory}/.npm-global
     pkgs.gettext
     pkgs.unzip
     pkgs.universal-ctags
+    (pkgs.google-cloud-sdk.withExtraComponents [
+      pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin
+    ])
   ];
 
   home.activation.patchCodexConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
