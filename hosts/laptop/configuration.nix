@@ -51,6 +51,7 @@
   };
 
   hardware.graphics.enable = true;
+  hardware.nvidia-container-toolkit.enable = true;
 
   services.power-profiles-daemon.enable = false;
 
@@ -100,10 +101,12 @@
 
   programs.fish.enable = true;
 
+  virtualisation.docker.enable = true;
+
   users.users.hikaru = {
     isNormalUser = true;
     shell = pkgs.fish;
-    extraGroups = ["wheel" "networkmanager" "video" "audio" ];
+    extraGroups = ["wheel" "networkmanager" "video" "audio" "docker" ];
   };
 
   imports = [ ./hardware-configuration.nix ];
@@ -116,6 +119,12 @@
   environment.systemPackages = with pkgs; [
     xorg.xrandr
     xsecurelock
+    docker
+    k3d
+    kubectl
+    kubernetes-helm
+    tilt
+    k9s
   ];
 
   system.stateVersion = "25.11"; # Did you read the comment?
