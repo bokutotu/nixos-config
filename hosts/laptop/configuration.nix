@@ -50,7 +50,10 @@
     ];
   };
 
-  hardware.graphics.enable = true;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
   hardware.nvidia-container-toolkit.enable = true;
 
   services.power-profiles-daemon.enable = false;
@@ -101,7 +104,11 @@
 
   programs.fish.enable = true;
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    enableNvidia = true;
+    daemon.settings.features.cdi = true;
+  };
 
   users.users.hikaru = {
     isNormalUser = true;
