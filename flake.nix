@@ -21,16 +21,16 @@
         config.allowUnfree = true;
       };
       codexPackage = unstablePkgs.codex.overrideAttrs (finalAttrs: previousAttrs: {
-        version = "0.136.0";
+        version = "0.137.0";
 
         src = unstablePkgs.fetchFromGitHub {
           owner = "openai";
           repo = "codex";
           tag = "rust-v${finalAttrs.version}";
-          hash = "sha256-MI9VrfMFuUOup0e8KECaFA8SbkrPLEG+6K/wqLA8rs8=";
+          hash = "sha256-puszZqi1lZeq8iXWAD9U9+WMnNvzMYKf6wVT9mtjSUU=";
         };
 
-        cargoHash = "sha256-zHNOUHUnyNxYSWn13H77ZdIuv09kHSlJfQBatTugLUA=";
+        cargoHash = "sha256-SX5LMO+IWismbH61Jd0g1mgykfav8DrqG+wjyNCWyCo=";
         cargoDeps = unstablePkgs.rustPlatform.fetchCargoVendor {
           inherit (finalAttrs) pname version src sourceRoot;
           hash = finalAttrs.cargoHash;

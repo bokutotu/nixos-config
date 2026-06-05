@@ -4,12 +4,11 @@
   networking.networkmanager.enable = true;
   nixpkgs.config.allowUnfree = true;
 
-  services.xserver.enable = true;
-  services.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.lxqt.enable = true;
-  environment.lxqt.excludePackages = with pkgs; [
-    xscreensaver
-  ];
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+    extraOptions = [ "--unsupported-gpu" ];
+  };
 
   fonts = {
     packages = with pkgs; [
@@ -55,6 +54,7 @@
     enable32Bit = true;
   };
   hardware.nvidia-container-toolkit.enable = true;
+  virtualisation.docker.enableNvidia = true;
 
   services.power-profiles-daemon.enable = false;
 
@@ -106,7 +106,6 @@
 
   virtualisation.docker = {
     enable = true;
-    enableNvidia = true;
     daemon.settings.features.cdi = true;
   };
 
@@ -124,14 +123,7 @@
   time.timeZone = "Asia/Tokyo";
 
   environment.systemPackages = with pkgs; [
-    xorg.xrandr
-    xsecurelock
     docker
-    k3d
-    kubectl
-    kubernetes-helm
-    tilt
-    k9s
   ];
 
   system.stateVersion = "25.11"; # Did you read the comment?
