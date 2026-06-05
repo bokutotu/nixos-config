@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -z "${DISPLAY:-}" ]]; then
+  echo "ERROR: DISPLAY is not set. Run this inside i3/X11." >&2
+  exit 1
+fi
+
+windows="$(
+  i3-msg -t get_tree |
+    jq -r '
+      def window_rows(workspace_name):
+        (.nodes[]? | window_rows(if .type == "workspace" then .name else workspace_name end)),
+        (.floating_nodes[]? | window_rows(if .type == "workspace" then .name else workspace_name end)),
+        (select(.window? != null) |
+          [
+            "[" + (workspace_name // "?") + "] "
+            + ((.window_properties.class // .window_properties.instance // "unknown") + " - ")
+            + (.name // "untitled"),
+            (.id | tostring)
+          ] | @tsv);
+      window_rows(null)
+    '
+)"
+
+if [[ -z "$windows" ]]; then
+  exit 0
+fi
+
+selected="$(printf '%s\n' "$windows" | dmenu -i -l 20 -p "window: ")" || exit 0
+
+if [[ -z "$selected" ]]; then
+  exit 0
+fi
+
+con_id="${selected##*$'\t'}"
+i3-msg "[con_id=${con_id}] focus" >/dev/null

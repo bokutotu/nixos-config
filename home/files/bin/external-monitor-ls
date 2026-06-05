@@ -21,9 +21,9 @@ if [[ -n "${1:-}" ]]; then
   exit 2
 fi
 
-if [[ -z "${SWAYSOCK:-}" ]]; then
-  echo "ERROR: SWAYSOCK is not set. Run this inside Sway." >&2
+if [[ -z "${DISPLAY:-}" ]]; then
+  echo "ERROR: DISPLAY is not set. Run this inside X11." >&2
   exit 1
 fi
 
-swaymsg -t get_outputs | jq -r '.[].name'
+xrandr --query | awk '$2 == "connected" { print $1 }'

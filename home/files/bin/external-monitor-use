@@ -24,13 +24,13 @@ if [[ "$#" -ne 1 ]]; then
   exit 2
 fi
 
-if [[ -z "${SWAYSOCK:-}" ]]; then
-  echo "ERROR: SWAYSOCK is not set. Run this inside Sway." >&2
+if [[ -z "${DISPLAY:-}" ]]; then
+  echo "ERROR: DISPLAY is not set. Run this inside X11." >&2
   exit 1
 fi
 
 target_output="$1"
-mapfile -t connected_outputs < <(swaymsg -t get_outputs | jq -r '.[].name')
+mapfile -t connected_outputs < <(xrandr --query | awk '$2 == "connected" { print $1 }')
 
 target_connected=false
 for connected_output in "${connected_outputs[@]}"; do
@@ -46,9 +46,9 @@ if [[ "$target_connected" != true ]]; then
   exit 1
 fi
 
-swaymsg -q output "$target_output" enable
+xrandr --output "$target_output" --auto
 for connected_output in "${connected_outputs[@]}"; do
   if [[ "$connected_output" != "$target_output" ]]; then
-    swaymsg -q output "$connected_output" disable
+    xrandr --output "$connected_output" --off
   fi
 done

@@ -1,0 +1,22 @@
+[window]
+decorations = "none"
+padding = { x = 0, y = 0 }
+
+[font]
+size = 10.0
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+
+[font.italic]
+family = "JetBrainsMono Nerd Font"
+
+[font.bold_italic]
+family = "JetBrainsMono Nerd Font"
+
+[colors.primary]
+background = "#ffffff"
+foreground = "#000000"

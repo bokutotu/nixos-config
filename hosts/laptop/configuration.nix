@@ -1,13 +1,27 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, unstablePkgs, ... }:
 
 {
   networking.networkmanager.enable = true;
   nixpkgs.config.allowUnfree = true;
 
-  programs.sway = {
+  services.xserver = {
     enable = true;
-    wrapperFeatures.gtk = true;
-    extraOptions = [ "--unsupported-gpu" ];
+    videoDrivers = [ "nvidia" ];
+
+    displayManager.startx = {
+      enable = true;
+      generateScript = true;
+    };
+
+    windowManager.i3.enable = true;
+  };
+
+  services.libinput = {
+    enable = true;
+    touchpad = {
+      tapping = true;
+      naturalScrolling = true;
+    };
   };
 
   fonts = {
@@ -70,8 +84,6 @@
       STOP_CHARGE_THRESH_BAT0 = 80;
     };
   };
-
-  services.xserver.videoDrivers = [  "nvidia" ];
 
   hardware.nvidia = {
     modesetting.enable = true;

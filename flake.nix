@@ -39,6 +39,9 @@
     in {
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = {
+          inherit unstablePkgs;
+        };
 
         modules = [
           ./hosts/laptop/configuration.nix
