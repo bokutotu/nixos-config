@@ -13,6 +13,15 @@ in
   home.username = "hikaru";
   home.homeDirectory = "/home/hikaru";
 
+  home.pointerCursor = {
+    package = pkgs.adwaita-icon-theme;
+    name = "Adwaita";
+    size = 42;
+
+    x11.enable = true;
+    gtk.enable = true;
+  };
+
   home.sessionPath = [
     "${codexPackage}/bin"
     "${config.home.homeDirectory}/.local/bin"
