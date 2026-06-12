@@ -86,3 +86,5 @@ if status --is-interactive
     # Create alias for ls -> lsd
     alias ls='lsd'
 end
+
+fish_add_path --global ~/.local/bin

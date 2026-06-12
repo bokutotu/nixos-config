@@ -134,6 +134,8 @@
 
   time.timeZone = "Asia/Tokyo";
 
+  programs.nix-ld.enable = true;
+
   environment.systemPackages = with pkgs; [
     docker
   ];
