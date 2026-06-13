@@ -209,3 +209,62 @@ end
 
 -- Reload Neovim command
 vim.api.nvim_create_user_command('ReloadAll', reload_all, { desc = 'Reload all Neovim configuration without restarting' })
+
+local cdw_base_dir = vim.g.cdw_base_dir or vim.fn.getcwd()
+cdw_base_dir = vim.fn.fnamemodify(cdw_base_dir, ':p'):gsub('/$', '')
+vim.g.cdw_base_dir = cdw_base_dir
+
+local function cdw_is_absolute(path)
+    return path:sub(1, 1) == '/'
+end
+
+local function cdw_resolve_dir(path)
+    local expanded = vim.fn.expand(path)
+
+    if cdw_is_absolute(expanded) then
+        return vim.fn.fnamemodify(expanded, ':p')
+    end
+
+    return vim.fn.fnamemodify(cdw_base_dir .. '/' .. expanded, ':p')
+end
+
+local function cdw_complete(arg_lead)
+    local expanded = vim.fn.expand(arg_lead)
+    local absolute_arg = cdw_is_absolute(expanded)
+    local search_root = absolute_arg and expanded or (cdw_base_dir .. '/' .. expanded)
+    local matches = vim.fn.glob(search_root .. '*', false, true)
+    local completions = {}
+
+    for _, match in ipairs(matches) do
+        if vim.fn.isdirectory(match) == 1 then
+            local completion = match
+
+            if not absolute_arg then
+                local prefix = cdw_base_dir .. '/'
+
+                if completion:sub(1, #prefix) == prefix then
+                    completion = completion:sub(#prefix + 1)
+                end
+            end
+
+            table.insert(completions, completion:gsub('/$', '') .. '/')
+        end
+    end
+
+    return completions
+end
+
+vim.api.nvim_create_user_command('Cdw', function(opts)
+    local dir = cdw_resolve_dir(opts.args)
+
+    vim.cmd('tcd ' .. vim.fn.fnameescape(dir))
+    local ok, tree_api = pcall(require, 'nvim-tree.api')
+    if ok then
+        tree_api.tree.change_root(dir)
+    end
+    vim.cmd('edit .')
+end, {
+    nargs = 1,
+    complete = cdw_complete,
+    desc = 'Change the current tab to a worktree directory',
+})
