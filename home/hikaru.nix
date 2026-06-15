@@ -47,6 +47,11 @@ end
     ".tmux.conf".source = ./files/tmux/tmux.conf;
     ".config/alacritty/alacritty.toml".source = ./files/alacritty/alacritty.toml;
     ".codex/custom_instructions.md".source = ./files/codex/custom_instructions.md;
+    ".codex/agents" = {
+      source = ./files/codex/agents;
+      recursive = true;
+    };
+    ".codex/skills/development".source = ./files/codex/skills/development;
     ".claude/CLAUDE.md".source = ./files/claude/CLAUDE.md;
     ".latexmkrc".source = ./files/latexmkrc;
     ".vimrc".source = ./files/vimrc;
@@ -178,7 +183,11 @@ bar {
 
   home.activation.patchCodexConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     config_file="${config.home.homeDirectory}/.codex/config.toml"
-    if [ -f "$config_file" ] && ! ${pkgs.gnugrep}/bin/grep -q '^model_instructions_file[[:space:]]*=' "$config_file"; then
+    config_dir="$(${pkgs.coreutils}/bin/dirname "$config_file")"
+    ${pkgs.coreutils}/bin/mkdir -p "$config_dir"
+    ${pkgs.coreutils}/bin/touch "$config_file"
+
+    if ! ${pkgs.gnugrep}/bin/grep -q '^model_instructions_file[[:space:]]*=' "$config_file"; then
       tmp_file="$(${pkgs.coreutils}/bin/mktemp)"
       ${pkgs.gawk}/bin/awk -v line='model_instructions_file = "~/.codex/custom_instructions.md"' '
         BEGIN { inserted = 0 }
@@ -188,6 +197,58 @@ bar {
       ' "$config_file" > "$tmp_file"
       ${pkgs.coreutils}/bin/mv "$tmp_file" "$config_file"
     fi
+
+    tmp_file="$(${pkgs.coreutils}/bin/mktemp)"
+    ${pkgs.gawk}/bin/awk '
+      function flush_agents() {
+        if (in_agents) {
+          if (!seen_threads) print "max_threads = 6"
+          if (!seen_depth) print "max_depth = 1"
+          in_agents = 0
+        }
+      }
+      BEGIN {
+        in_agents = 0
+        seen_agents = 0
+        seen_threads = 0
+        seen_depth = 0
+      }
+      /^[[:space:]]*\[agents\][[:space:]]*$/ {
+        flush_agents()
+        print
+        in_agents = 1
+        seen_agents = 1
+        seen_threads = 0
+        seen_depth = 0
+        next
+      }
+      /^[[:space:]]*\[/ {
+        flush_agents()
+        print
+        next
+      }
+      in_agents && /^[[:space:]]*max_threads[[:space:]]*=/ {
+        if (!seen_threads) print "max_threads = 6"
+        seen_threads = 1
+        next
+      }
+      in_agents && /^[[:space:]]*max_depth[[:space:]]*=/ {
+        if (!seen_depth) print "max_depth = 1"
+        seen_depth = 1
+        next
+      }
+      { print }
+      END {
+        flush_agents()
+        if (!seen_agents) {
+          if (NR > 0) print ""
+          print "[agents]"
+          print "max_threads = 6"
+          print "max_depth = 1"
+        }
+      }
+    ' "$config_file" > "$tmp_file"
+    ${pkgs.coreutils}/bin/mv "$tmp_file" "$config_file"
   '';
 
   programs.git = {
