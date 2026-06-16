@@ -77,6 +77,22 @@ local function apply_diff_highlights()
   end)
 end
 
+local function is_diffview_file_history_tab()
+  if vim.t.diffview_file_history_tab then
+    return true
+  end
+
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.bo[buf].filetype == 'DiffviewFileHistory' then
+      vim.t.diffview_file_history_tab = true
+      return true
+    end
+  end
+
+  return false
+end
+
 vim.api.nvim_create_autocmd('ColorScheme', {
   callback = apply_diff_highlights,
 })
@@ -91,8 +107,12 @@ require('diffview').setup({
     },
   },
   hooks = {
-    diff_buf_read = function(_)
-      -- Disable folding so unchanged context always stays visible in Diffview.
+    diff_buf_win_enter = function(_)
+      if is_diffview_file_history_tab() then
+        return
+      end
+
+      -- Disable folding so unchanged context stays visible in ordinary Diffview diffs.
       vim.opt_local.foldenable = false
     end,
   },
