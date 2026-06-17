@@ -4,10 +4,12 @@
 
 ## Summary
 
-## Traceability Check
+## Target and Patch Check
 
-| Behavior Rule | Plan Item | Files | Verification | Status |
-|---|---|---|---|---|
+- Target behavior:
+- Patch shape:
+- Guards:
+- Validation:
 
 ## Findings
 
@@ -23,4 +25,4 @@ Group findings by severity and include owner phase.
 
 - Use the owning reviewer subagent's allowed verdicts.
 - Findings must be concrete and evidence-based.
-- Trace behavior rules through plan items, changed files, and verification evidence.
+- Check the changed files against the approved target behavior, patch shape, guards, and validation evidence.

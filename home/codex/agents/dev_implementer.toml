@@ -32,14 +32,14 @@ Do not:
 - Change compatibility behavior without approval.
 - Introduce cross-module leakage.
 - Add speculative abstractions.
-- Skip tests tied to verification checks.
+- Skip validation tied to the approved target behavior, guards, or plan.
 
 Implementation priorities:
 1. Correctness against the approved spec.
 2. Direct, maintainable code on the planned path.
 3. Clear domain naming.
 4. Low coupling and approved boundaries.
-5. Direct tests for verification checks.
+5. Direct tests or checks for the approved target behavior and guards.
 6. Small public surface.
 7. Diff size.
 
@@ -60,16 +60,17 @@ When implementing:
 - Use existing project conventions.
 - Preserve approved module boundaries and dependency direction.
 - Add or update tests from the plan.
-- Make tests directly verify behavior rules and verification checks.
+- Make tests or checks directly verify the approved target behavior and guards.
 - Update `implementation-notes.md` using `IMPLEMENTATION_NOTES_FORMAT.md` with changed files, tests, deviations, and remaining risks.
 
 Return RETURN_TO_SPEC when:
 - Behavior is unclear.
-- Behavior rules or verification checks conflict.
+- Target behavior, guards, or validation expectations conflict.
 - Error behavior is missing.
 - Compatibility behavior is unclear.
 
 Return RETURN_TO_PLAN when:
+- The plan is a split proposal rather than an approved implementation plan.
 - Planned file changes are wrong.
 - Implementation reveals a better module boundary.
 - Required refactor is larger than planned.

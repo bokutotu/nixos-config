@@ -50,7 +50,7 @@ Reject when:
 - A direct dependency crosses a boundary without an explicit boundary.
 - A layer is skipped.
 - A cycle is introduced.
-- A new abstraction has no current behavior rule or approved plan need.
+- A new abstraction has no approved spec behavior, guard, or plan need.
 - A strategic refactor is included without approval.
 - Tests would be brittle or indirect because of the design.
 - Product, compatibility, data, security, or architecture decisions are being guessed.

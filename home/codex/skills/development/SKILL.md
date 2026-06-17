@@ -1,11 +1,11 @@
 ---
 name: development
-description: Orchestrate non-trivial software development work through intake, exploration, reviewable spec, reviewable plan, architecture review, implementation, code review, and revision. Use for coding tasks, refactors, bug fixes, feature work, test design, or architecture-sensitive changes. The parent agent must keep the main context as an orchestrator, use the dev_* subagents for phase work, treat subagent artifact files as the source of truth, always output spec.md and plan.md from those files for user review before implementation, and route user feedback or human-decision answers back to the owning subagent.
+description: Orchestrate non-trivial software development work through intake, exploration, compact reviewable spec, compact reviewable plan or split proposal, architecture review, implementation, code review, and revision. Use for coding tasks, refactors, bug fixes, feature work, test design, or architecture-sensitive changes. The parent agent must keep the main context as an orchestrator, use the dev_* subagents for phase work, treat subagent artifact files as the source of truth, output spec.md and plan.md from those files for user review before implementation, and route user feedback or human-decision answers back to the owning subagent.
 ---
 
 # Development Skill
 
-Use this skill to keep development work explicit, reviewable, and delegated.
+Use this skill to keep development work explicit, reviewable, compact, and delegated.
 
 The parent agent is an orchestrator. After intake, phase-specific rules belong to subagents, not the parent.
 
@@ -43,7 +43,7 @@ Required file rules:
 - The parent writes the original request and known constraints to `task-brief.md`.
 - The parent writes raw user feedback to files such as `feedback/spec-review-001.md`.
 - Each subagent reads required input artifacts directly from disk.
-- Each subagent writes its owned artifact directly to the requested output path before returning an OK or PASS verdict.
+- Each subagent writes its owned artifact directly to the requested output path before returning any non-`BLOCKED` verdict.
 - If a subagent cannot read required input files or write its output file, it must return `BLOCKED`.
 - The parent must not synthesize, rewrite, repair, or merge a subagent-owned artifact from its own judgment.
 - `spec.md` and `plan.md` must be shown to the user from the files, not from parent summaries or path-only references.
@@ -58,8 +58,8 @@ Required file rules:
 2. **Exploration**: `dev_explorer` reads `task-brief.md` and writes `exploration.md`.
 3. **Spec**: `dev_specifier` reads `task-brief.md` and `exploration.md`, then writes `spec.md`.
 4. **Spec review**: Parent reads `spec.md` from disk, outputs the full file contents, and waits for user review.
-5. **Plan**: `dev_planner` reads the approved `spec.md` and `exploration.md`, then writes `plan.md`.
-6. **Plan review**: Parent reads `plan.md` from disk, outputs the full file contents, and waits for user review.
+5. **Plan**: `dev_planner` reads the approved `spec.md` and `exploration.md`, then writes `plan.md` as an implementation plan or split proposal.
+6. **Plan review**: Parent reads `plan.md` from disk, outputs the full file contents, and waits for user review. If the planner returns `SPLIT_REQUIRED`, do not implement; ask the user which split task to run next.
 7. **Architecture review**: `dev_architect` reads the approved artifacts and writes `architecture-review.md`.
 8. **Implementation**: `dev_implementer` reads the approved artifacts, changes code, and writes `implementation-notes.md`.
 9. **Review**: `dev_reviewer` reads the approved artifacts and implementation notes, then writes `review.md`.
@@ -94,8 +94,6 @@ If the repository should not keep workflow documents, use a temporary task direc
 - Do not replace them with path-only references.
 - Do not ask the user for review until their full file contents have been output.
 - Do not implement before the user has reviewed them.
-- If an artifact is too long for one response, split it across messages before asking for review.
-
 ## User Feedback Routing
 
 When the user replies during an active development workflow:

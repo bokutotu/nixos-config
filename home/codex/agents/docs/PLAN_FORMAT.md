@@ -1,72 +1,51 @@
 # Plan
 
-## Target Result
+## Size Check
 
-Describe what will be true after implementation in concrete terms. A reviewer should be able to imagine the changed behavior.
+- Result: `fits-one-task` or `split-required`
+- Reason: ...
+- Split proposal, if needed:
+  1. ...
+  2. ...
 
-## Current State
+## Changes
 
-List the relevant current files, symbols, behavior, tests, and constraints.
+### <Feature or Change>
 
-## Work Items
+- Files: `<path>`, `<path>`
+- Action: ...
+- Preserve: ...
+- Validate: ...
 
-### PLAN-001: <Short Action Title>
+Use code or pseudocode only when it makes the implementation choice less ambiguous.
 
-- Target files: `<path>`, `<path>`
-- Before:
 ```pseudo
-<current behavior, structure, or raw code if useful>
+mapping:
+  ...
 ```
-- After:
-```pseudo
-<target behavior, structure, or raw code if useful>
-```
-- Exact changes: <specific edits to make>
-- Covers: `BR-001`, `VC-001`
-- Dependencies: <previous plan item or none>
-- Validation: <test/build/check>
 
-Repeat for every work item.
+Repeat for each cohesive feature or change.
 
-## Execution Order
+## Steps
 
-List the exact order the implementer should follow.
+1. ...
+2. ...
 
 ## Validation
 
-List targeted tests, broader tests, builds, formatters, or manual checks. Map each verification check to a validation item.
+- ...
 
-## Refactor Scope
+## Open Questions
 
-Classify each refactor:
-
-- Required refactor: needed to satisfy the spec safely.
-- Local cleanup: directly adjacent cleanup that simplifies touched code.
-- Strategic refactor: useful later but out of scope unless approved.
-
-## Architecture and Boundaries
-
-State module boundaries, dependency direction, and any boundary service, port, facade, repository, adapter, or application-service entry point the implementation should use.
-
-## Risks
-
-List specific implementation risks and how the plan contains them.
-
-## Not Doing
-
-List explicitly excluded changes.
-
-## Review Checklist
-
-- Every behavior rule has a plan item.
-- Every verification check has validation.
-- Every file change has a reason.
-- No unapproved strategic refactor is included.
-- No known compatibility behavior is changed without approval.
+- None
 
 ## Rules
 
-- Each work item must name target files.
-- Each work item must show before and after pseudocode or raw code when useful.
-- Each work item must map back to behavior rules and verification checks.
-- The plan must be concrete enough for implementation review before code changes start.
+- Write the smallest artifact that has only one reasonable interpretation.
+- Implement the approved `spec.md`; do not restate it.
+- Organize by feature or change, not by layer unless the layer is the change.
+- Leave investigation details in `exploration.md`.
+- Use real code when exact syntax matters.
+- Use pseudocode when algorithm, control flow, or data mapping matters.
+- Do not use both code and pseudocode for the same point.
+- Omit fields inside a change item when they add no information.

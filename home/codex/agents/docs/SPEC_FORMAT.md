@@ -2,58 +2,37 @@
 
 ## Goal
 
-Describe the outcome in concrete user-visible terms.
+Describe the intended outcome in concrete terms.
+
+## Target Contract
+
+List only what must be true after implementation. Do not describe how to implement it.
+
+- ...
+
+Use code or pseudocode only when it makes the contract less ambiguous.
+
+```pseudo
+target:
+  ...
+```
 
 ## Non-Goals
 
-List behavior or scope that will not change.
-
-## Definitions
-
-Define domain terms used by the spec.
-
-## Current Behavior
-
-Describe relevant existing behavior with evidence. Use pseudocode when it makes the current behavior easier to understand.
-
-## Target Behavior
-
-Describe required behavior after the change. Use pseudocode when it makes the target behavior easier to understand.
-
-## Behavior Rules
-
-| ID | Rule | Source or Evidence |
-|---|---|---|
-| BR-001 | <behavior rule> | <user request, file, symbol, or observation> |
-
-## Verification Checks
-
-| ID | Behavior Rule | Scenario | Expected Result | Validation |
-|---|---|---|---|---|
-| VC-001 | BR-001 | <observable scenario> | <observable result> | <test, command, manual check, or reason no automated test applies> |
-
-## Error Behavior
-
-Describe exact errors, fallbacks, and edge-case behavior.
-
-## Compatibility
-
-State what existing behavior, public API, data shape, CLI, config, or serialized format must remain compatible.
-
-## State and Data
-
-Describe state transitions, data model expectations, migrations, or say none.
+List behavior, schemas, files, APIs, or workflows that must not change.
 
 ## Open Questions
 
-List only questions that block the spec.
+List only questions that block the target contract, or `None`.
 
 ## Rules
 
-- Every behavior rule must have a stable `BR-###` ID.
-- Every verification check must have a stable `VC-###` ID and be observable.
-- Domain terms must be defined.
-- Non-goals must be explicit.
-- Current behavior and target behavior must be separated.
-- Error behavior and compatibility expectations must be explicit.
+- Write the smallest artifact that has only one reasonable interpretation.
+- Define what must be true; leave implementation strategy to `plan.md`.
+- Leave investigation details in `exploration.md`.
+- Use exact names and data shapes instead of explanatory prose when possible.
+- Use real code when exact syntax is part of the contract.
+- Use pseudocode when it defines data shape or behavior more clearly than prose.
+- Do not use both code and pseudocode for the same point.
 - Avoid ambiguous words such as "properly", "as needed", "fast", "clean", "simple", "reasonable", or "appropriate" unless defined.
+- If a detail answers "how will this be implemented?", move it to `plan.md`.
