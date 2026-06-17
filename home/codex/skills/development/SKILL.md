@@ -17,6 +17,7 @@ The parent agent is an orchestrator. After intake, phase-specific rules belong t
 - Present the full `spec.md` and `plan.md` file contents to the user for review every time.
 - Enforce gates before implementation.
 - Route revision requests to the subagent that owns the artifact.
+- Record any user-specified subagent reasoning effort and apply it when spawning matching subagents.
 - Summarize final results.
 
 The parent must not do substantial exploration, specification, planning, architecture review, implementation, or code review itself.
@@ -49,9 +50,6 @@ Required file rules:
 - When asking for spec or plan review, the parent outputs the full current file contents before asking for approval.
 
 ## Required Flow
-
-**YOU MUST FOLLOW THIS FLOW. NEVER SKIP**
-**YOU MUST ALWAYS SPAWN SUBAGENTS FOR EACH FLOW**
 
 **YOU MUST FOLLOW THIS FLOW. NEVER SKIP**
 **YOU MUST ALWAYS SPAWN SUBAGENTS FOR EACH FLOW**
@@ -120,107 +118,41 @@ When a subagent returns `HUMAN_DECISION_REQUIRED`, the parent asks the user and 
 
 The parent must not answer on behalf of the user when the decision affects behavior, compatibility, data, security, architecture, or domain language.
 
-Each question must have its own context:
+The parent forwards the subagent-provided question blocks to the user without rewriting, summarizing, answering, or changing their order.
 
-```md
-## Question N: <short title>
+The parent writes the user's raw answer to a feedback file and sends that feedback file path back to the same subagent.
 
-Context:
-<facts that make this question necessary>
+## Task Capsule Handoff
 
-Why this matters:
-<what changes depending on the answer>
+Pass subagents compact context with these parent-owned fields:
 
-Decision needed:
-<the exact choice the user must make>
+- Goal
+- Phase
+- Subagent reasoning effort
+- Current artifact paths
+- Task directory
+- Input artifact paths
+- Output artifact path
+- Inputs
+- Relevant files or search targets
+- Raw user feedback path
+- Constraints
+- Required output
+- Stop conditions
 
-Recommendation:
-<subagent recommendation, if any>
-```
+## Task Brief Intake
 
-## Task Capsule
+The parent creates `task-brief.md` before delegation with these parent-owned fields:
 
-Pass subagents compact context in this shape:
-
-```md
-# Task Capsule
-
-## Goal
-
-## Phase
-
-## Current artifact paths
-
-## Task directory
-
-## Input artifact paths
-
-## Output artifact path
-
-## Inputs
-
-## Relevant files or search targets
-
-## Raw user feedback path
-
-## Constraints
-
-## Required output
-
-## Stop conditions
-```
-
-## Agent Result
-
-Require subagents to return this shape:
-
-```md
-# Agent Result
-
-## Verdict
-
-## Artifact paths
-
-## Files read
-
-## Files written
-
-## Summary
-
-## Evidence
-
-## Decisions
-
-## Open questions
-
-## Next recommendation
-```
-
-Allowed verdicts depend on the subagent.
-
-## Intake Brief
-
-The parent creates the task brief before delegation:
-
-```md
-# Task Brief
-
-## Original request
-
-## Goal
-
-## Known constraints
-
-## Unknowns
-
-## Expected code changes
-
-## Suspected affected areas
-
-## Risk level
-
-## Human review checkpoints
-```
+- Original request
+- Goal
+- Known constraints
+- Unknowns
+- Expected code changes
+- Suspected affected areas
+- Risk level
+- Subagent reasoning effort
+- Human review checkpoints
 
 ## Final Response
 
