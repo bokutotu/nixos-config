@@ -10,7 +10,9 @@
 
 ## Changes
 
-### <Feature or Change>
+Group implementation work under `###` headings when the plan has more than one cohesive feature, contract area, boundary, or validation group. Do not flatten unrelated schema, API, webhook, storage, config, migration, or test work into one change list.
+
+### <Cohesive Change>
 
 - Files: `<path>`, `<path>`
 - Action: ...
@@ -27,6 +29,10 @@ mapping:
 Repeat for each cohesive feature or change.
 
 ## Steps
+
+Keep steps grouped by the same cohesive changes used above when a single ordered list would mix unrelated work.
+
+### <Cohesive Change>
 
 1. ...
 2. ...

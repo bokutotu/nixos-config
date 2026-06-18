@@ -8,9 +8,13 @@ Describe the intended outcome in concrete terms.
 
 List only what must be true after implementation. Do not describe how to implement it.
 
+Group related contract items under `###` headings when the target has more than one independent area. Do not flatten unrelated schema, API, webhook, storage, idempotency, privacy, configuration, or non-effect contracts into one bullet list.
+
+### <Contract Area>
+
 - ...
 
-Use code or pseudocode only when it makes the contract less ambiguous.
+Use code or pseudocode inside the relevant contract area only when it makes the contract less ambiguous.
 
 ```pseudo
 target:
