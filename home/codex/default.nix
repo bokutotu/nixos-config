@@ -7,6 +7,7 @@
     recursive = true;
   };
   home.file.".codex/skills/development".source = ./skills/development;
+  home.file.".codex/skills/japanese-tech-writing".source = ./skills/japanese-tech-writing;
 
   home.activation.patchCodexConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     config_file="${config.home.homeDirectory}/.codex/config.toml"
