@@ -1,6 +1,6 @@
 ---
 name: english-tech-writing
-description: English technical prose and book-manuscript style guide. Use when writing, editing, or reviewing English technical chapters, articles, documentation, explanations, drafts, or rewrites, especially when the user wants rigorous argument structure, low reader load, concrete headings, non-LLM-ish phrasing, and concise prose.
+description: English technical prose and book-manuscript style guide. You **MUST** Use when writing, editing, or reviewing English technical chapters, articles, documentation, explanations, drafts, or rewrites, especially when the user wants rigorous argument structure, low reader load, concrete headings, non-LLM-ish phrasing, and concise prose.
 ---
 
 # English Technical Writing Standards

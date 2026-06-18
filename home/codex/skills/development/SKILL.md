@@ -1,164 +1,288 @@
 ---
 name: development
-description: Orchestrate non-trivial software development work through intake, exploration, compact reviewable spec, compact reviewable plan or split proposal, architecture review, implementation, code review, and revision. Use for coding tasks, refactors, bug fixes, feature work, test design, or architecture-sensitive changes. The parent agent must keep the main context as an orchestrator, use the dev_* subagents for phase work, treat subagent artifact files as the source of truth, output spec.md and plan.md from those files for user review before implementation, and route user feedback or human-decision answers back to the owning subagent.
+description: Development lifecycle skill. Create a spec and plan, then implement.
 ---
 
-# Development Skill
+## Flow
 
-Use this skill to keep development work explicit, reviewable, compact, and delegated.
+You must follow this flow.
+Never skip phases.
 
-The parent agent is an orchestrator. After intake, phase-specific rules belong to subagents, not the parent.
+1. Spec
+2. Plan
+3. Implementation
 
-## Parent Responsibilities
+### Back to previous sections
 
-- Create the initial task brief.
-- Create the task artifact directory.
-- Pass artifact paths and raw user feedback file paths to subagents.
-- Present the full `spec.md` and `plan.md` file contents to the user for review every time.
-- Enforce gates before implementation.
-- Route revision requests to the subagent that owns the artifact.
-- Record any user-specified subagent reasoning effort and apply it when spawning matching subagents.
-- Summarize final results.
+When writing `plan.md`, if there are ambiguous things in the spec, you can go back to phase 1.
+When starting implementation, if there are ambiguous things in the plan, you can go back to phase 2. If the spec is ambiguous, go back to phase 1.
 
-The parent must not do substantial exploration, specification, planning, architecture review, implementation, or code review itself.
 
-## File-Based Handoff Protocol
+## Spec creation
 
-Subagent artifact files are the source of truth. Parent-agent messages and subagent chat responses are only a control plane.
+### Simplicity is most important
 
-The parent message to a subagent may contain:
+Keeping the project simple is the biggest goal.
+You should choose the simplest solution.
 
-- Phase name.
-- Task directory path.
-- Input artifact paths.
-- Output artifact path.
-- Raw user feedback file path, when relevant.
-- Stop conditions.
+### Flow
 
-The parent message to a subagent must not be treated as authoritative for prior phase content. The parent must not summarize prior artifacts for the next subagent. The parent must pass file paths instead.
+1. Read the user input in the working directory.
+2. Gather information.
+3. If there is ambiguity, ask the user (output Questions) and stop.
+4. Once the ambiguity is resolved, output Spec
 
-Required file rules:
+### Gather Information
 
-- The parent creates one task artifact directory before exploration.
-- The parent writes the original request and known constraints to `task-brief.md`.
-- The parent writes raw user feedback to files such as `feedback/spec-review-001.md`.
-- Each subagent reads required input artifacts directly from disk.
-- Each subagent writes its owned artifact directly to the requested output path before returning any non-`BLOCKED` verdict.
-- If a subagent cannot read required input files or write its output file, it must return `BLOCKED`.
-- The parent must not synthesize, rewrite, repair, or merge a subagent-owned artifact from its own judgment.
-- `spec.md` and `plan.md` must be shown to the user from the files, not from parent summaries or path-only references.
-- When asking for spec or plan review, the parent outputs the full current file contents before asking for approval.
+The user's request must be about a project you can access.
+Gather as much information as possible.
 
-## Required Flow
+### Ambiguity Resolution
 
-**YOU MUST FOLLOW THIS FLOW. NEVER SKIP**
-**YOU MUST ALWAYS SPAWN SUBAGENTS FOR EACH FLOW**
+- Ask questions over multiple turns if needed to remove all ambiguity.
+- First, ask high-level / abstract questions. As the conversation progresses, shift toward more specific questions.
+- If there is an inconsistency during the conversation, point it out and return to high-level abstract questions.
 
-1. **Intake**: Parent creates a task artifact directory and writes `task-brief.md`.
-2. **Exploration**: `dev_explorer` reads `task-brief.md` and writes `exploration.md`.
-3. **Spec**: `dev_specifier` reads `task-brief.md` and `exploration.md`, then writes `spec.md`.
-4. **Spec review**: Parent reads `spec.md` from disk, outputs the full file contents, and waits for user review.
-5. **Plan**: `dev_planner` reads the approved `spec.md` and `exploration.md`, then writes `plan.md` as an implementation plan or split proposal.
-6. **Plan review**: Parent reads `plan.md` from disk, outputs the full file contents, and waits for user review. If the planner returns `SPLIT_REQUIRED`, do not implement; ask the user which split task to run next.
-7. **Architecture review**: `dev_architect` reads the approved artifacts and writes `architecture-review.md`.
-8. **Implementation**: `dev_implementer` reads the approved artifacts, changes code, and writes `implementation-notes.md`.
-9. **Review**: `dev_reviewer` reads the approved artifacts and implementation notes, then writes `review.md`.
-10. **Revision loop**: Parent routes each revision to the owning subagent until complete.
+### Output
 
-Move backward when a later phase invalidates an earlier artifact:
+- The output spec must be simple and unambiguous.
 
-- Spec issue: return to `dev_specifier`.
-- Plan or file strategy issue: return to `dev_planner`.
-- Design issue: return to `dev_architect`.
-- Code or test issue: return to `dev_implementer`.
-- Review issue: return to the subagent named by the reviewer.
+### Problem Split
 
-## Required Artifacts
+One commit or PR must do only one thing.
+One thing means one of the following:
+- One feature
+- One objective
+- One refactor
+- One bug fix
+The following do not define one thing:
+- This spec will change many lines.
+- This spec will change many components or modules.
 
-For every non-trivial task, maintain these reviewable artifacts:
+### Format
 
-- `task-brief.md`
-- `exploration.md`
-- `spec.md`
-- `plan.md`
-- `architecture-review.md`
-- `implementation-notes.md`
-- `review.md`
+Use the `english-tech-writing` skill.
 
-If the repository should not keep workflow documents, use a temporary task directory and summarize the final artifact paths.
+#### Spec
 
-`spec.md` and `plan.md` are hard gates:
+```markdown
+## Target
+Describe what we will do.
+(If there are many topics to handle, consider splitting the spec.)
+## Features
+### Feature n: <feature title>
+**Term**
+- <term>: description
+- ...
+**Current**
+<explain the current format>
+**Target**
+<explain the target format>
+**Out of Scope**
+<If this is a discussion, summarize it.>
+Explain the current status.
+Use facts. If referring to code would be too large, use pseudocode.
+If the code is small, use raw code.
+In a spec, a sequence diagram or ER diagram is often the easiest to understand.
+Since you cannot render them now, output ASCII art or HTML.
+```
 
-- Do not skip them.
-- Do not replace them with a short summary.
-- Do not replace them with path-only references.
-- Do not ask the user for review until their full file contents have been output.
-- Do not implement before the user has reviewed them.
-## User Feedback Routing
+#### Questions
 
-When the user replies during an active development workflow:
+```
+## Question n: title
+### Description
+<Briefly summarize the question.>
+### Context
+<explain the current behavior or other evidence>
+### Problem
+<what is ambiguous or what the problem is>
+### Recommendation
+<write the recommendation>
+```
 
-- Forward spec feedback to `dev_specifier`.
-- Forward plan feedback to `dev_planner`.
-- Forward design feedback to `dev_architect`.
-- Forward implementation feedback to `dev_implementer`.
-- Forward review feedback to `dev_reviewer` or to the subagent named by the review finding.
+## Plan
 
-The parent must pass the user's raw message file path, current artifact paths, and the phase goal to the subagent. The parent must not rewrite the artifact from its own judgment.
+**Keep It Simple Stupid**
 
-The parent must write the user's raw message to a feedback file and pass the feedback file path to the owning subagent. The owning subagent must read the feedback file and rewrite its owned artifact file when a revision is needed.
+- Implementation must be as simple as possible.
+- If there is a simpler way but it requires changing the spec, you must ask the user to change the spec.
 
-Keep the same phase open until the owning subagent returns an accepted result. If the runtime cannot keep a subagent process open, start the same subagent again with the latest artifact and state that it is continuing the same phase.
+**SOLID**
 
-## Human Decision Routing
+You must check that this implementation never affects SOLID principles.
 
-When a subagent returns `HUMAN_DECISION_REQUIRED`, the parent asks the user and then sends the user's answer back to the same subagent.
+**Module Dependency Graph**
 
-The parent must not answer on behalf of the user when the decision affects behavior, compatibility, data, security, architecture, or domain language.
+Never cycle.
 
-The parent forwards the subagent-provided question blocks to the user without rewriting, summarizing, answering, or changing their order.
+Never
+```
+moduleA -> moduleA-A (using moduleA-B is not bad)
+        -> moduleA-B
 
-The parent writes the user's raw answer to a feedback file and sends that feedback file path back to the same subagent.
+moduleB -> moduleB-A (using moduleA child)
+```
+If you want to use other module's funciton, this funciton should be splited to service and Need interface
 
-## Task Capsule Handoff
+**Expose as few modules, functions, and data types as possible**
 
-Pass subagents compact context with these parent-owned fields:
+<write good example and bad example>
 
-- Goal
-- Phase
-- Subagent reasoning effort
-- Current artifact paths
-- Task directory
-- Input artifact paths
-- Output artifact path
-- Inputs
-- Relevant files or search targets
-- Raw user feedback path
-- Constraints
-- Required output
-- Stop conditions
+Your task is to create an implementation plan for the spec.
 
-## Task Brief Intake
+**Prefer Feature based directory not layer base direcotry**
 
-The parent creates `task-brief.md` before delegation with these parent-owned fields:
+Never:
+- utils
+- usecase
+- type
+- components
 
-- Original request
-- Goal
-- Known constraints
-- Unknowns
-- Expected code changes
-- Suspected affected areas
-- Risk level
-- Subagent reasoning effort
-- Human review checkpoints
+This is never screaming. If check direcotry name or file name or naming and type signature, 
+reader must be able to imagine what this module, file, function, data type doing.
 
-## Final Response
+Prefer:
+- BidirectionalElaboration
+- Surface
+- CoreSyntax
 
-At completion, report:
+**Naming**
 
-- Spec reviewed.
-- Plan reviewed.
-- Code implemented.
-- Tests or validation run.
-- Review result.
-- Remaining risks or follow-ups.
+Naming must be simple, short, uniquly.
+
+Never:
+- GetUserFilterdByLoggingInByEmail
+
+Good
+- GetEmailLoginUser
+
+### Flow
+
+1. Gather information if needed.
+2. If the spec is ambiguous, go back to the Spec phase.
+3. If something is unclear at the plan level, ask the user (output Questions) and stop.
+4. Output the plan.
+
+### Difference between Spec and Plan
+
+- Spec is what we will do
+- Plan is how to build this spec.
+- If you are in this section, what we will do is configured. You only have to think about how to do it.
+
+### Format
+
+#### Plan
+
+```markdown
+## Overview
+Summarize how to build this spec in a few sentences.
+If the spec is large, it is decomposed below into smaller features,
+each independently implementable and reviewable.
+
+## Approach
+Describe the chosen design and why it is the simplest option that satisfies the spec.
+If a simpler design exists but would require changing the spec, stop and ask the user.
+
+## Features
+List the small features that, together, implement the spec.
+Order them so each builds only on earlier ones.
+Each feature must do one thing (one feature / objective / refactor / bug fix).
+
+### Feature n: <feature title>
+**Goal**
+What this single feature achieves, and which part of the spec it covers.
+
+**Affected Modules**
+- `<module>`: what changes and why
+
+**Dependency Impact**
+How module dependencies change. The graph must stay acyclic.
+```
+A -> B
++ B -> D
+```
+(Omit this block if the feature adds no edges.)
+
+**Exposure**
+What becomes public vs. internal. Expose as little as possible.
+- Public: <name> — why it must be public
+- Internal: <name> — kept private
+
+**Sketch**
+Show how, using the lightest form that removes ambiguity
+(see "Code in Plan" below). Omit if the Goal is already unambiguous.
+
+**Depends on**
+Earlier features this one requires (e.g. "Feature 1"), or "none".
+
+**Test**
+- <case>: expected result
+
+## Build Order
+The order to implement the features, as a short list.
+1. Feature 1
+2. Feature 2
+...
+```
+
+## Implementation
+
+Your task is to implement the plan, one feature at a time, in Build Order.
+Each feature is one commit (one thing). Do not start the next feature until the current one is done.
+If the plan turns out to be ambiguous, stop and go back to the Plan phase (or the Spec phase if the spec is ambiguous).
+
+### Naming
+
+Decide a name from what the thing does, not how it is built.
+A reader must be able to guess the behavior from the name, type signature, and location alone.
+
+How to decide:
+1. State in one short phrase what it does.
+2. Drop words that the type signature or module path already tells the reader.
+3. Keep it short and unique. If two names could be confused, make the difference explicit.
+
+Never (restates the mechanism / over-qualified):
+- `GetUserFilterdByLoggingInByEmail`
+- `UserDataManagerHelper`
+
+Good (states the result):
+- `GetEmailLoginUser`
+- `parseSurface`
+
+Rules:
+- Name by intent, never by layer (`util`, `manager`, `helper`, `data` are banned).
+- Same concept, same word everywhere. Do not call it `user` here and `account` there.
+- A type signature plus a good name should make a doc comment unnecessary.
+
+### Test
+
+Compare whole objects, not fields one by one.
+
+Build the expected object in the test code, run the target, then assert the two objects are equal in a single comparison.
+Do not read out individual fields and check them separately.
+
+Bad (field-by-field):
+```
+result = parseSurface(input)
+assert result.name == "x"
+assert result.kind == Lam
+assert result.body == ...
+```
+
+Good (one whole-object comparison):
+```
+expected = Term{ name = "x", kind = Lam, body = ... }
+result   = parseSurface(input)
+assert result == expected
+```
+
+Why:
+- One comparison fails clearly and shows the whole diff, not a single field.
+- When the shape changes, you fix the expected object in one place, not many asserts.
+- The expected object documents what the result should look like.
+
+Rules:
+- Construct the expected value explicitly in the test; do not derive it from the code under test.
+- One behavior per test. The name says what behavior it checks.
+- If equality needs custom logic, define it on the type, not in the test.
