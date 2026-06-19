@@ -43,6 +43,13 @@ Gather as much information as possible.
 - First, ask high-level / abstract questions. As the conversation progresses, shift toward more specific questions.
 - If there is an inconsistency during the conversation, point it out and return to high-level abstract questions.
 
+
+### Question order example
+
+Ask from abstract to concrete:
+
+Problem / motivation -> Desired outcome -> Scope in/out -> User-visible or API contract -> Data model / flow -> Edge cases and validation
+
 ### Output
 
 - The output spec must be simple and unambiguous.
@@ -127,8 +134,6 @@ If you want to use other module's funciton, this funciton should be splited to s
 
 **Expose as few modules, functions, and data types as possible**
 
-<write good example and bad example>
-
 Your task is to create an implementation plan for the spec.
 
 **Prefer Feature based directory not layer base direcotry**
@@ -169,6 +174,17 @@ Good
 - Spec is what we will do
 - Plan is how to build this spec.
 - If you are in this section, what we will do is configured. You only have to think about how to do it.
+
+### Gather information
+
+Understand why the codebase is shaped this way before planning changes.
+Check the local coding rules, naming style, module boundaries, and design rules.
+
+Design the simplest solution that still follows those rules.
+
+Look for similar implementations.
+If an existing implementation has the same purpose, plan to reuse or extend it instead of creating a parallel path.
+If it has a different purpose, explain why the new implementation should stay separate.
 
 ### Format
 
