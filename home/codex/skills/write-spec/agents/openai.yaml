@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Spec"
+  short_description: "Define a small unambiguous change"
+  default_prompt: "Use $write-spec to turn my request into an unambiguous spec."

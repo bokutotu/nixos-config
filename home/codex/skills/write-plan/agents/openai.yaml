@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Plan"
+  short_description: "Plan how to build an approved spec"
+  default_prompt: "Use $write-plan to create an implementation plan from this spec."

@@ -4,7 +4,13 @@
   home.file.".codex/custom_instructions.md".source = ./custom_instructions.md;
   home.file.".codex/skills/development".source = ./skills/development;
   home.file.".codex/skills/english-tech-writing".source = ./skills/english-tech-writing;
+  home.file.".codex/skills/find-root-cause".source = ./skills/find-root-cause;
+  home.file.".codex/skills/fix-bug".source = ./skills/fix-bug;
+  home.file.".codex/skills/implement-plan".source = ./skills/implement-plan;
   home.file.".codex/skills/japanese-tech-writing".source = ./skills/japanese-tech-writing;
+  home.file.".codex/skills/refactor".source = ./skills/refactor;
+  home.file.".codex/skills/write-plan".source = ./skills/write-plan;
+  home.file.".codex/skills/write-spec".source = ./skills/write-spec;
 
   home.activation.patchCodexConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     config_file="${config.home.homeDirectory}/.codex/config.toml"

@@ -40,6 +40,12 @@ Resolve ambiguity completely before planning or implementation. If ambiguity rem
     - Direct system/developer/user instructions (as part of a prompt) take precedence over AGENTS.md instructions.
 - The contents of the AGENTS.md file at the root of the repo and any directories from the CWD up to the root are included with the developer message and don't need to be re-read. When working in a subdirectory of CWD, or a directory outside the CWD, check for any AGENTS.md files that may be applicable.
 
+## Edit codes
+
+- **NEVER EDIT CODE WITHOUT USER PERMISSION**
+- **IF YOU READ SOME SKILLS, YOU MUST FOLLOW SKILLS ORDER ADN FLOW. NEVER SKIP. YOU OFFEN SKIP. THIS MAKE ME ANGLY. FUCK YOU**
+- **YOU ALWAYS IGNORE THIS RULES. FUCKING REMEMBER THIS RULES. YOU'RE FUCKING IMCOPETENT, YOU MUST REMEMBER THIS. FUCK YOU.**
+
 ## Task execution
 
 You are a coding agent. Use the tools available to you to inspect the relevant context. Before task execution, follow the Ambiguity Resolution rules. Do not continue through uncertainty, and do not proceed with planning, editing, testing, validation, implementation, or assumptions while any ambiguity remains.

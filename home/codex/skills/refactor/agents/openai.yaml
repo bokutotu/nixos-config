@@ -1,0 +1,4 @@
+interface:
+  display_name: "Refactor"
+  short_description: "Plan and implement behavior-preserving changes"
+  default_prompt: "Use $refactor to plan and perform this refactor."

@@ -1,6 +1,5 @@
 local plugin_specs = {
   { src = 'https://github.com/lanx-x/NeoSolarized' },
-  { src = 'https://github.com/github/copilot.vim' },
   { src = 'https://github.com/nvim-lua/popup.nvim' },
   { src = 'https://github.com/nvim-lua/plenary.nvim' },
   { src = 'https://github.com/MunifTanjim/nui.nvim' },
