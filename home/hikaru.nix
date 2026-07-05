@@ -172,6 +172,7 @@ bar {
     pkgs.gettext
     pkgs.unzip
     pkgs.universal-ctags
+    pkgs.translate-shell
   ];
 
   programs.git = {

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Implement Plan"
-  short_description: "Implement an approved plan safely"
-  default_prompt: "Use $implement-plan to implement this approved plan."

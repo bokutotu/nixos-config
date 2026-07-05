@@ -1,4 +1,0 @@
-interface:
-  display_name: "Find Root Cause"
-  short_description: "Trace a bug to its concrete cause"
-  default_prompt: "Use $find-root-cause to identify why this bug happens."
