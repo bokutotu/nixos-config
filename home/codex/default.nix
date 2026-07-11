@@ -13,14 +13,11 @@
     ${pkgs.coreutils}/bin/mkdir -p "$config_dir"
     ${pkgs.coreutils}/bin/touch "$config_file"
 
-    if ! ${pkgs.gnugrep}/bin/grep -q '^model_instructions_file[[:space:]]*=' "$config_file"; then
-      tmp_file="$(${pkgs.coreutils}/bin/mktemp)"
-      ${pkgs.gawk}/bin/awk -v line='model_instructions_file = "~/.codex/custom_instructions.md"' '
-        BEGIN { inserted = 0 }
-        inserted == 0 && /^\[/ { print line; inserted = 1 }
-        { print }
-        END { if (inserted == 0) print line }
-      ' "$config_file" > "$tmp_file"
+    tmp_file="$(${pkgs.coreutils}/bin/mktemp)"
+    ${pkgs.gawk}/bin/awk -f ${./patch-config.awk} "$config_file" > "$tmp_file"
+    if ${pkgs.diffutils}/bin/cmp -s "$config_file" "$tmp_file"; then
+      ${pkgs.coreutils}/bin/rm "$tmp_file"
+    else
       ${pkgs.coreutils}/bin/mv "$tmp_file" "$config_file"
     fi
   '';

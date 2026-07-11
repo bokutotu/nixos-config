@@ -20,3 +20,8 @@ family = "JetBrainsMono Nerd Font"
 [colors.primary]
 background = "#ffffff"
 foreground = "#000000"
+
+[[keyboard.bindings]]
+key = "Enter"
+mods = "Control"
+chars = "\u001b[13;5u"
