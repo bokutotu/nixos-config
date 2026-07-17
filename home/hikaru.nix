@@ -139,6 +139,7 @@ bar {
     pkgs.curl
     pkgs.jq
     pkgs.firefox
+    unstablePkgs.obsidian
     pkgs.slack
     pkgs.spotify
     pkgs.nodejs_24
