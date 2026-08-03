@@ -139,6 +139,8 @@ bar {
     pkgs.curl
     pkgs.jq
     pkgs.firefox
+    unstablePkgs.brave
+    pkgs.blender
     unstablePkgs.obsidian
     pkgs.slack
     pkgs.spotify

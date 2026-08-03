@@ -2,6 +2,7 @@
 
 {
   home.file.".codex/custom_instructions.md".source = ./custom_instructions.md;
+  home.file.".codex/skills/cognitive-rhythm-writing".source = ./skills/cognitive-rhythm-writing;
   home.file.".codex/skills/english-tech-writing".source = ./skills/english-tech-writing;
   home.file.".codex/skills/japanese-tech-writing".source = ./skills/japanese-tech-writing;
   home.file.".codex/skills/write-plan".source = ./skills/write-plan;
