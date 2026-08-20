@@ -41,3 +41,12 @@ vim.lsp.config('ts_ls', {
   },
 })
 vim.lsp.enable('ts_ls')
+
+-- 2.3 SQL
+if vim.fn.executable('sqls') == 1 then
+  vim.lsp.config('sqls', {
+    cmd = { 'sqls' },
+    filetypes = { 'sql' },
+  })
+  vim.lsp.enable('sqls')
+end

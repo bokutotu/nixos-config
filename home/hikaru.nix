@@ -1,4 +1,4 @@
-{ config, lib, pkgs, unstablePkgs ? pkgs, ... }:
+{ config, lib, pkgs, unstablePkgs ? pkgs, chatgptPkgs ? pkgs, ... }:
 
 let
   nvimConfigDir = ./files/nvim;
@@ -31,18 +31,6 @@ in
   home.file = {
     ".npmrc".text = ''
 prefix=${config.home.homeDirectory}/.npm-global
-'';
-    ".config/fish/config.fish".text = (builtins.readFile ./files/fish/config.fish) + ''
-
-if status --is-login; and test -z "$DISPLAY"; and test "$XDG_VTNR" = 1
-    set -gx XDG_CURRENT_DESKTOP i3
-    set -gx XDG_SESSION_TYPE x11
-    set -gx GTK_IM_MODULE fcitx
-    set -gx QT_IM_MODULE fcitx
-    set -gx XMODIFIERS @im=fcitx
-
-    exec startx
-end
 '';
     ".tmux.conf".source = ./files/tmux/tmux.conf;
     ".config/alacritty/alacritty.toml".source = ./files/alacritty/alacritty.toml;
@@ -140,11 +128,15 @@ bar {
     pkgs.jq
     pkgs.firefox
     unstablePkgs.brave
+    pkgs.google-chrome
     pkgs.blender
     unstablePkgs.obsidian
+    chatgptPkgs.chatgpt
     pkgs.slack
     pkgs.spotify
     pkgs.nodejs_24
+    pkgs.python3
+    pkgs.pnpm
     pkgs.fish
     pkgs.alacritty
     pkgs.dmenu
@@ -166,6 +158,7 @@ bar {
     pkgs.typescript
     pkgs.typescript-language-server
     pkgs.lua-language-server
+    pkgs.sqls
     pkgs.nil
     pkgs.nixd
     pkgs.pyright
@@ -205,6 +198,22 @@ bar {
       update = "nix flake update ~/nixos-config && sudo nixos-rebuild switch --flake ~/nixos-config#laptop";
       cleanup = "sudo nix-collect-garbage -d";
     };
+  };
+
+  programs.fish = {
+    enable = true;
+    loginShellInit = ''
+      if status --is-login; and test -z "$DISPLAY"; and test "$XDG_VTNR" = 1
+          set -gx XDG_CURRENT_DESKTOP i3
+          set -gx XDG_SESSION_TYPE x11
+          set -gx GTK_IM_MODULE fcitx
+          set -gx QT_IM_MODULE fcitx
+          set -gx XMODIFIERS @im=fcitx
+
+          exec startx
+      end
+    '';
+    interactiveShellInit = builtins.readFile ./files/fish/config.fish;
   };
 
   programs.direnv = {

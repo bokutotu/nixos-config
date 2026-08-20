@@ -1,0 +1,4 @@
+interface:
+  display_name: "English Cognitive Rhythm"
+  short_description: "Shape cognitive rhythm in English prose"
+  default_prompt: "Use $english-cognitive-rhythm-writing to revise this English technical prose for stronger cognitive rhythm without weakening its rigor."

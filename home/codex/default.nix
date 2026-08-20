@@ -2,7 +2,19 @@
 
 {
   home.file.".codex/custom_instructions.md".source = ./custom_instructions.md;
+  home.file.".codex/openrouter-deepseek.config.toml".source = ./openrouter-deepseek.config.toml;
+  home.file.".local/bin/codex-deepseek" = {
+    executable = true;
+    text = ''
+      #!${pkgs.runtimeShell}
+      exec codex --profile openrouter-deepseek "$@"
+    '';
+  };
   home.file.".codex/skills/cognitive-rhythm-writing".source = ./skills/cognitive-rhythm-writing;
+  home.file.".codex/skills/english-cognitive-rhythm-writing" = {
+    source = ./skills/english-cognitive-rhythm-writing;
+    recursive = true;
+  };
   home.file.".codex/skills/english-tech-writing".source = ./skills/english-tech-writing;
   home.file.".codex/skills/japanese-tech-writing".source = ./skills/japanese-tech-writing;
   home.file.".codex/skills/write-plan".source = ./skills/write-plan;

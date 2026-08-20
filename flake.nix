@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-chatgpt.url = "github:Moraxyc/nixpkgs/chatgpt-linux";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
@@ -11,12 +12,16 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-chatgpt, home-manager, ... }:
     let
       system = "x86_64-linux";
       username = "hikaru";
       hostname = "laptop";
       unstablePkgs = import nixpkgs-unstable {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      chatgptPkgs = import nixpkgs-chatgpt {
         inherit system;
         config.allowUnfree = true;
       };
@@ -36,7 +41,7 @@
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "hm-backup";
             home-manager.extraSpecialArgs = {
-              inherit unstablePkgs;
+              inherit unstablePkgs chatgptPkgs;
             };
 
             home-manager.users.${username} = import ./home/hikaru.nix;
