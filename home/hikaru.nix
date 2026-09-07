@@ -9,7 +9,10 @@ let
   }) nvimFiles);
 in
 {
-  imports = [ ./codex ];
+  imports = [
+    ./codex
+    ./pi
+  ];
 
   home.username = "hikaru";
   home.homeDirectory = "/home/hikaru";
