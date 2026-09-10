@@ -39,11 +39,11 @@
     },
     "nixpkgs-chatgpt": {
       "locked": {
-        "lastModified": 1787160460,
-        "narHash": "sha256-/p+LoTmjalDgyS3+cWPibC+ux3OdtTz+wAt5RXgu0yc=",
+        "lastModified": 1788948199,
+        "narHash": "sha256-KMjpNZ19BHh9z7rM8DFWPTE5gRfpQfr9d81hZRhuPBM=",
         "owner": "Moraxyc",
         "repo": "nixpkgs",
-        "rev": "a5c6f71033566af345b0fd8a02c864d0152be797",
+        "rev": "6f5904350edee5bb794f854ab51b1cb20b2da215",
         "type": "github"
       },
       "original": {

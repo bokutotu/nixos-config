@@ -10,16 +10,6 @@
       exec codex --profile openrouter-deepseek "$@"
     '';
   };
-  home.file.".codex/skills/cognitive-rhythm-writing".source = ./skills/cognitive-rhythm-writing;
-  home.file.".codex/skills/english-cognitive-rhythm-writing" = {
-    source = ./skills/english-cognitive-rhythm-writing;
-    recursive = true;
-  };
-  home.file.".codex/skills/english-tech-writing".source = ./skills/english-tech-writing;
-  home.file.".codex/skills/japanese-tech-writing".source = ./skills/japanese-tech-writing;
-  home.file.".codex/skills/write-plan".source = ./skills/write-plan;
-  home.file.".codex/skills/write-spec".source = ./skills/write-spec;
-
   home.activation.patchCodexConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     config_file="${config.home.homeDirectory}/.codex/config.toml"
     config_dir="$(${pkgs.coreutils}/bin/dirname "$config_file")"

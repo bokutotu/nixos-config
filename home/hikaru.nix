@@ -12,6 +12,7 @@ in
   imports = [
     ./codex
     ./pi
+    ./skills
   ];
 
   home.username = "hikaru";

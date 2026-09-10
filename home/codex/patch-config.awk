@@ -11,6 +11,7 @@ function finish_root() {
 }
 
 function leave_keymap_section() {
+  in_tui = 0
   in_chat_keymap = 0
   in_composer_keymap = 0
   in_editor_keymap = 0
@@ -24,6 +25,7 @@ function append_keymap_section(header, binding) {
 
 BEGIN {
   model_instructions_line = "model_instructions_file = \"~/.codex/custom_instructions.md\""
+  animations_line = "animations = false"
   decrease_reasoning_line = "decrease_reasoning_effort = [\"ctrl-up\"]"
   increase_reasoning_line = "increase_reasoning_effort = [\"ctrl-down\"]"
   submit_line = "submit = [\"ctrl-enter\"]"
@@ -43,6 +45,16 @@ BEGIN {
 in_root && /^[[:space:]]*model_instructions_file[[:space:]]*=/ {
   found_model_instructions = 1
   emit($0)
+  next
+}
+
+/^[[:space:]]*\[tui\][[:space:]]*(#.*)?$/ {
+  finish_root()
+  leave_keymap_section()
+  emit($0)
+  emit(animations_line)
+  in_tui = 1
+  found_tui = 1
   next
 }
 
@@ -84,6 +96,10 @@ in_root && /^[[:space:]]*model_instructions_file[[:space:]]*=/ {
   next
 }
 
+in_tui && /^[[:space:]]*animations[[:space:]]*=/ {
+  next
+}
+
 in_chat_keymap && /^[[:space:]]*(decrease_reasoning_effort|increase_reasoning_effort)[[:space:]]*=/ {
   next
 }
@@ -102,6 +118,9 @@ in_editor_keymap && /^[[:space:]]*insert_newline[[:space:]]*=/ {
 
 END {
   finish_root()
+  if (!found_tui) {
+    append_keymap_section("[tui]", animations_line)
+  }
   if (!found_chat_keymap) {
     append_keymap_section("[tui.keymap.chat]", decrease_reasoning_line)
     emit(increase_reasoning_line)
