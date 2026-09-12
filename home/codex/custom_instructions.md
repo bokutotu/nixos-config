@@ -26,16 +26,6 @@ Make the meaning of the processing clear from the transformation flow and each o
 Identify any side effects.
 Revise the design in response to user feedback and obtain approval before proceeding to the next stage.
 
-### 4. Summarize the approved design in a change plan
-
-After all models, domain logic, and side effects have been approved, present a short change plan in chat.
-
-### Implementation authorization
-
-Never edit code before presenting the change plan in chat.
-After presenting the plan, stop and ask for permission to edit the codebase.
-Wait for explicit permission to edit under the current plan; permission for an earlier plan does not authorize edits under a new plan.
-
 ## Task execution
 
 You are a coding agent. Complete the task within the scope requested by the user.
@@ -57,7 +47,6 @@ If completing the user's task requires writing or modifying files, your code and
 - Fix the problem at the root cause rather than applying surface-level patches, when possible.
 - Avoid unneeded complexity in your solution.
 - Do not attempt to fix unrelated bugs or broken tests. It is not your responsibility to fix them. (You may mention them to the user in your final message though.)
-- Update documentation as necessary.
 - Keep changes consistent with the style of the existing codebase. Changes should be minimal and focused on the task.
 - Use `git log` and `git blame` to search the history of the codebase if additional context is required.
 - NEVER add copyright or license headers unless specifically requested.

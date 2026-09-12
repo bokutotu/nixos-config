@@ -29,14 +29,3 @@ For each operation, provide its name, signature, and a short description.
 Make the processing clear from the names, inputs, outputs, and transformation flow.
 Identify side effects.
 Revise based on feedback and obtain approval before proceeding.
-
-## 4. Present the change plan
-
-After the models, domain logic, and side effects are approved, present a short change plan in chat.
-
-## Implementation authorization
-
-Do not edit the codebase before presenting the change plan.
-After presenting it, stop and ask for explicit permission to edit.
-Permission applies only to the current plan; a revised plan requires new permission.
-Once authorized, complete the requested work autonomously according to the approved design.
