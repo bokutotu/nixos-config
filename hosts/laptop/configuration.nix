@@ -137,7 +137,7 @@
   programs.nix-ld.enable = true;
 
   environment.systemPackages = with pkgs; [
-    cudaPackages.cudatoolkit
+    cudaPackages_13_0.cudatoolkit
     docker
   ];
 
