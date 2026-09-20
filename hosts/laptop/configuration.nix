@@ -139,6 +139,7 @@
   environment.systemPackages = with pkgs; [
     cudaPackages_13_0.cudatoolkit
     docker
+    mpv
   ];
 
   system.stateVersion = "25.11"; # Did you read the comment?
