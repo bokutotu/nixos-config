@@ -26,6 +26,8 @@ Make the meaning of the processing clear from the transformation flow and each o
 Identify any side effects.
 Revise the design in response to user feedback and obtain approval before proceeding to the next stage.
 
+Discuss with the user what tests should verify and obtain approval before implementation.
+
 ## Task execution
 
 You are a coding agent. Complete the task within the scope requested by the user.

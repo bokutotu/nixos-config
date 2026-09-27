@@ -29,3 +29,5 @@ For each operation, provide its name, signature, and a short description.
 Make the processing clear from the names, inputs, outputs, and transformation flow.
 Identify side effects.
 Revise based on feedback and obtain approval before proceeding.
+
+Discuss with the user what tests should verify and obtain approval before implementation.

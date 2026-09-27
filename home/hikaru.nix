@@ -120,6 +120,24 @@ bar {
   } // nvimHomeFiles;
 
   home.packages = [
+    (pkgs.writeShellApplication {
+      name = "direnv-clear-cache";
+      runtimeInputs = [ pkgs.bash pkgs.coreutils pkgs.findutils ];
+      text = ''
+        if (( $# != 0 )); then
+          printf 'Usage: direnv-clear-cache\n' >&2
+          exit 1
+        fi
+
+        find -P ${lib.escapeShellArg config.home.homeDirectory} -type d -name .direnv -prune \
+          -exec bash -c '
+            for directory; do
+              rm -rf -- "$directory" || exit 1
+              printf "Deleted: %s\n" "$directory"
+            done
+          ' bash {} +
+      '';
+    })
     unstablePkgs.neovim
     pkgs.git
     pkgs.gh
@@ -222,7 +240,7 @@ bar {
 
   programs.direnv = {
     enable = true;
-    nix-direnv.enable = false;
+    nix-direnv.enable = true;
   };
 
   home.stateVersion = "25.11";
