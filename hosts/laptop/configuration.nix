@@ -1,74 +1,19 @@
-{ config, lib, pkgs, unstablePkgs, ... }:
+{ profiles, ... }:
 
 {
+  imports = [
+    ./hardware-configuration.nix
+    profiles.dev-shell
+    profiles.desktop
+    profiles.nvidia
+  ];
+
   networking.networkmanager.enable = true;
-  nixpkgs.config.allowUnfree = true;
 
-  services.xserver = {
-    enable = true;
-    videoDrivers = [ "nvidia" ];
-
-    displayManager.startx = {
-      enable = true;
-      generateScript = true;
-    };
-
-    windowManager.i3.enable = true;
+  services.libinput.touchpad = {
+    tapping = true;
+    naturalScrolling = true;
   };
-
-  services.libinput = {
-    enable = true;
-    touchpad = {
-      tapping = true;
-      naturalScrolling = true;
-    };
-  };
-
-  fonts = {
-    packages = with pkgs; [
-      nerd-fonts.jetbrains-mono
-      noto-fonts-cjk-sans
-      noto-fonts-cjk-serif
-      noto-fonts-color-emoji
-    ];
-
-    fontconfig = {
-      enable = true;
-      defaultFonts = {
-        monospace = [
-          "JetBrainsMono Nerd Font"
-          "Noto Sans CJK JP"
-          "Noto Color Emoji"
-        ];
-        sansSerif = [
-          "Noto Sans"
-          "Noto Sans CJK JP"
-          "Noto Color Emoji"
-        ];
-        serif = [
-          "Noto Serif"
-          "Noto Serif CJK JP"
-          "Noto Color Emoji"
-        ];
-        emoji = [ "Noto Color Emoji" ];
-      };
-    };
-  };
-
-  i18n.inputMethod = {
-    enable = true;
-    type = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      fcitx5-mozc
-    ];
-  };
-
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
-  hardware.nvidia-container-toolkit.enable = true;
-  virtualisation.docker.enableNvidia = true;
 
   services.power-profiles-daemon.enable = false;
 
@@ -86,11 +31,6 @@
   };
 
   hardware.nvidia = {
-    modesetting.enable = true;
-    open = true;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-
     prime = {
       offload = {
         enable = true;
@@ -102,46 +42,10 @@
     };
   };
 
-  nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
-    substituters = [
-      "https://cache.nixos.org"
-      "https://cache.iog.io"
-    ];
-    trusted-public-keys = [
-      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
-      "cache.iog.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
-    ];
-  };
-
-  programs.fish.enable = true;
-
-  virtualisation.docker = {
-    enable = true;
-    daemon.settings.features.cdi = true;
-  };
-
-  users.users.hikaru = {
-    isNormalUser = true;
-    shell = pkgs.fish;
-    extraGroups = ["wheel" "networkmanager" "video" "audio" "docker" ];
-  };
-
-  imports = [ ./hardware-configuration.nix ];
-
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  time.timeZone = "Asia/Tokyo";
+  home-manager.users.hikaru._module.args.configurationName = "laptop";
 
-  programs.nix-ld.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    cudaPackages_13_0.cudatoolkit
-    docker
-    mpv
-  ];
-
-  system.stateVersion = "25.11"; # Did you read the comment?
-
+  system.stateVersion = "25.11";
 }
