@@ -41,6 +41,10 @@
       };
 
       nvidia = import ./profiles/nvidia.nix;
+
+      gpu-vm = import ./hosts/gpu-vm {
+        profiles = self.nixosModules;
+      };
     };
 
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
