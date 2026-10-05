@@ -1,4 +1,4 @@
-{ profiles, ... }:
+{ profiles, pkgs, ... }:
 
 {
   imports = [
@@ -7,6 +7,8 @@
     profiles.desktop
     profiles.nvidia
   ];
+
+  environment.systemPackages = [ pkgs.go-grip ];
 
   networking.networkmanager.enable = true;
 
