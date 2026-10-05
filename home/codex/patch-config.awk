@@ -26,6 +26,7 @@ function append_keymap_section(header, binding) {
 BEGIN {
   model_instructions_line = "model_instructions_file = \"~/.codex/custom_instructions.md\""
   animations_line = "animations = false"
+  show_tooltips_line = "show_tooltips = false"
   decrease_reasoning_line = "decrease_reasoning_effort = [\"ctrl-up\"]"
   increase_reasoning_line = "increase_reasoning_effort = [\"ctrl-down\"]"
   submit_line = "submit = [\"ctrl-enter\"]"
@@ -53,6 +54,7 @@ in_root && /^[[:space:]]*model_instructions_file[[:space:]]*=/ {
   leave_keymap_section()
   emit($0)
   emit(animations_line)
+  emit(show_tooltips_line)
   in_tui = 1
   found_tui = 1
   next
@@ -96,7 +98,7 @@ in_root && /^[[:space:]]*model_instructions_file[[:space:]]*=/ {
   next
 }
 
-in_tui && /^[[:space:]]*animations[[:space:]]*=/ {
+in_tui && /^[[:space:]]*(animations|show_tooltips)[[:space:]]*=/ {
   next
 }
 
@@ -120,6 +122,7 @@ END {
   finish_root()
   if (!found_tui) {
     append_keymap_section("[tui]", animations_line)
+    emit(show_tooltips_line)
   }
   if (!found_chat_keymap) {
     append_keymap_section("[tui.keymap.chat]", decrease_reasoning_line)
