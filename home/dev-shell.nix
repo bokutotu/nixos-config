@@ -58,6 +58,7 @@ prefix=${config.home.homeDirectory}/.npm-global
     pkgs.tree
     pkgs.htop
     pkgs.curl
+    pkgs.sshfs
     pkgs.jq
     pkgs.nodejs_24
     pkgs.python3

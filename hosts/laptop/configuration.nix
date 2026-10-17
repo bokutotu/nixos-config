@@ -12,6 +12,8 @@
 
   networking.networkmanager.enable = true;
 
+  services.cloudflare-warp.enable = true;
+
   services.libinput.touchpad = {
     tapping = true;
     naturalScrolling = true;
