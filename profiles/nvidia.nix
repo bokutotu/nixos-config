@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, unstablePkgs, ... }:
 
 {
   services.xserver.videoDrivers = [ "nvidia" ];
@@ -21,5 +21,5 @@
     daemon.settings.features.cdi = true;
   };
 
-  environment.systemPackages = [ pkgs.cudaPackages_13_0.cudatoolkit ];
+  environment.systemPackages = [ unstablePkgs.cudaPackages.cudatoolkit ];
 }

@@ -2,12 +2,12 @@
   description = "Hikaru's NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-chatgpt.url = "github:Moraxyc/nixpkgs/chatgpt-linux";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -40,7 +40,13 @@
         };
       };
 
-      nvidia = import ./profiles/nvidia.nix;
+      nvidia = { pkgs, ... }: {
+        imports = [ ./profiles/nvidia.nix ];
+        _module.args.unstablePkgs = import nixpkgs-unstable {
+          system = pkgs.stdenv.hostPlatform.system;
+          config.allowUnfree = true;
+        };
+      };
 
       gpu-vm = import ./hosts/gpu-vm {
         profiles = self.nixosModules;
