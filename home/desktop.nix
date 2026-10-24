@@ -24,6 +24,18 @@
       source = ./files/bin/external-monitor-off;
       executable = true;
     };
+    ".local/bin/keyboard-ls" = {
+      source = ./files/bin/keyboard-control.py;
+      executable = true;
+    };
+    ".local/bin/keyboard-disable" = {
+      source = ./files/bin/keyboard-control.py;
+      executable = true;
+    };
+    ".local/bin/keyboard-enable" = {
+      source = ./files/bin/keyboard-control.py;
+      executable = true;
+    };
     ".local/bin/i3-window-switcher" = {
       source = ./files/bin/i3-window-switcher;
       executable = true;
@@ -108,6 +120,8 @@ bar {
     pkgs.slop
     pkgs.xclip
     pkgs.xorg.xrandr
+    pkgs.xorg.xinput
+    pkgs.python3
   ];
 
   programs.fish = {
