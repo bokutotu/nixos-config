@@ -119,3 +119,7 @@ require('diffview').setup({
 })
 
 apply_diff_highlights()
+
+vim.api.nvim_create_user_command('PRDiff', function()
+  require('rc.pr_diff').open()
+end, { desc = 'Review the current branch PR using its GitHub base and head' })
