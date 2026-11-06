@@ -31,3 +31,7 @@ Identify side effects.
 Revise based on feedback and obtain approval before proceeding.
 
 Discuss with the user what tests should verify and obtain approval before implementation.
+
+# Output
+
+The IDE renders responses as Markdown, supporting math, Mermaid diagrams, and embedded images, video, and audio. Reference media by file path. Use these features when helpful.
