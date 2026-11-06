@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    # Alacritty 0.16.1: avoid the X11/fcitx5 input regression in 0.17.0.
+    nixpkgs-alacritty.url = "github:NixOS/nixpkgs/25f538306313eae3927264466c70d7001dcea1df";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-chatgpt.url = "github:Moraxyc/nixpkgs/chatgpt-linux";
 
@@ -12,7 +14,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-chatgpt, home-manager, ... }: {
+  outputs = { self, nixpkgs, nixpkgs-alacritty, nixpkgs-unstable, nixpkgs-chatgpt, home-manager, ... }: {
     nixosModules = {
       dev-shell = { config, lib, pkgs, ... }: {
         imports = [
@@ -33,6 +35,10 @@
 
       desktop = { pkgs, ... }: {
         imports = [ ./profiles/desktop.nix ];
+
+        home-manager.extraSpecialArgs.alacrittyPkgs = import nixpkgs-alacritty {
+          system = pkgs.stdenv.hostPlatform.system;
+        };
 
         home-manager.extraSpecialArgs.chatgptPkgs = import nixpkgs-chatgpt {
           system = pkgs.stdenv.hostPlatform.system;
