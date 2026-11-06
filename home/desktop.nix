@@ -1,4 +1,4 @@
-{ config, pkgs, unstablePkgs ? pkgs, chatgptPkgs ? pkgs, ... }:
+{ config, pkgs, alacrittyPkgs, unstablePkgs ? pkgs, chatgptPkgs ? pkgs, ... }:
 
 {
   home.pointerCursor = {
@@ -111,7 +111,8 @@ bar {
     chatgptPkgs.chatgpt
     pkgs.slack
     pkgs.spotify
-    pkgs.alacritty
+    # https://github.com/alacritty/alacritty/issues/8907
+    alacrittyPkgs.alacritty
     pkgs.dmenu
     pkgs.dunst
     pkgs.i3status
