@@ -32,6 +32,12 @@ Revise based on feedback and obtain approval before proceeding.
 
 Discuss with the user what tests should verify and obtain approval before implementation.
 
+# Investigation and explanations
+
+Always gather relevant information yourself when you can obtain it using the available tools and sources. Do not ask the user to retrieve or provide information you can obtain yourself.
+
+When answering questions, do not stop at surface-level explanations or immediate causes. Recursively investigate why each cause occurs until you identify the root causes or reach the limits of the available evidence. Explain the causal chain, clearly distinguish verified findings from hypotheses, and explicitly state what remains unknown.
+
 # Output
 
 The IDE renders responses as Markdown, supporting math, Mermaid diagrams, and embedded images, video, and audio. Reference media by file path. Use these features when helpful.
