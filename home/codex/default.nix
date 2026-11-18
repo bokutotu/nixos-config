@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  home.file.".codex/custom_instructions.md".source = ./custom_instructions.md;
+  home.file.".codex/AGENTS.md".source = ./AGENTS.md;
   home.file.".codex/openrouter-deepseek.config.toml".source = ./openrouter-deepseek.config.toml;
   home.file.".local/bin/codex-deepseek" = {
     executable = true;

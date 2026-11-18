@@ -4,12 +4,6 @@ function emit(line) {
   last_line_blank = line ~ /^[[:space:]]*$/
 }
 
-function finish_root() {
-  if (!in_root) return
-  if (!found_model_instructions) emit(model_instructions_line)
-  in_root = 0
-}
-
 function leave_keymap_section() {
   in_tui = 0
   in_chat_keymap = 0
@@ -24,15 +18,12 @@ function append_keymap_section(header, binding) {
 }
 
 BEGIN {
-  model_instructions_line = "model_instructions_file = \"~/.codex/custom_instructions.md\""
   animations_line = "animations = false"
   show_tooltips_line = "show_tooltips = false"
   decrease_reasoning_line = "decrease_reasoning_effort = [\"ctrl-up\"]"
   increase_reasoning_line = "increase_reasoning_effort = [\"ctrl-down\"]"
   submit_line = "submit = [\"ctrl-enter\"]"
   insert_newline_line = "insert_newline = [\"enter\"]"
-  in_root = 1
-  found_model_instructions = 0
   in_chat_keymap = 0
   found_chat_keymap = 0
   in_composer_keymap = 0
@@ -43,14 +34,7 @@ BEGIN {
   last_line_blank = 0
 }
 
-in_root && /^[[:space:]]*model_instructions_file[[:space:]]*=/ {
-  found_model_instructions = 1
-  emit($0)
-  next
-}
-
 /^[[:space:]]*\[tui\][[:space:]]*(#.*)?$/ {
-  finish_root()
   leave_keymap_section()
   emit($0)
   emit(animations_line)
@@ -61,7 +45,6 @@ in_root && /^[[:space:]]*model_instructions_file[[:space:]]*=/ {
 }
 
 /^[[:space:]]*\[tui\.keymap\.chat\][[:space:]]*(#.*)?$/ {
-  finish_root()
   leave_keymap_section()
   emit($0)
   emit(decrease_reasoning_line)
@@ -72,7 +55,6 @@ in_root && /^[[:space:]]*model_instructions_file[[:space:]]*=/ {
 }
 
 /^[[:space:]]*\[tui\.keymap\.composer\][[:space:]]*(#.*)?$/ {
-  finish_root()
   leave_keymap_section()
   emit($0)
   emit(submit_line)
@@ -82,7 +64,6 @@ in_root && /^[[:space:]]*model_instructions_file[[:space:]]*=/ {
 }
 
 /^[[:space:]]*\[tui\.keymap\.editor\][[:space:]]*(#.*)?$/ {
-  finish_root()
   leave_keymap_section()
   emit($0)
   emit(insert_newline_line)
@@ -92,7 +73,6 @@ in_root && /^[[:space:]]*model_instructions_file[[:space:]]*=/ {
 }
 
 /^[[:space:]]*\[/ {
-  finish_root()
   leave_keymap_section()
   emit($0)
   next
@@ -119,7 +99,6 @@ in_editor_keymap && /^[[:space:]]*insert_newline[[:space:]]*=/ {
 }
 
 END {
-  finish_root()
   if (!found_tui) {
     append_keymap_section("[tui]", animations_line)
     emit(show_tooltips_line)
